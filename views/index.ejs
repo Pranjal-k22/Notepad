@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotePad - Your Personal Note Taking App</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        * { font-family: 'Poppins', sans-serif; }
+        .task-card { transition: all 0.3s ease; }
+        .task-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2); }
+        .btn-primary { transition: all 0.3s ease; }
+        .btn-primary:hover { transform: scale(1.05); }
+        .form-input { transition: all 0.3s ease; }
+        .form-input:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+    </style>
+</head>
+<body>
+    <div class="main w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-8 shadow-lg">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="flex items-center gap-3 mb-2">
+                    <i class="fas fa-sticky-note text-3xl"></i>
+                    <h1 class="text-4xl font-bold tracking-tighter">NotePad</h1>
+                </div>
+                <p class="text-blue-100 text-sm">Capture your thoughts, organize your ideas</p>
+            </div>
+        </header>
+
+        <!-- Create Form Section -->
+        <div class="py-12 px-6">
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-slate-700 rounded-2xl shadow-2xl p-8 border border-slate-600">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fas fa-pen text-blue-400"></i>
+                        Create a new note
+                    </h2>
+                    <form action="/create" method="post" class="space-y-4">
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Note Title</label>
+                            <input class="form-input w-full outline-none rounded-lg px-5 py-3 bg-slate-600 text-white placeholder-slate-400 border border-slate-500 focus:border-blue-400" type="text" placeholder="Enter your note title" name="title" required>
+                        </div>
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Details</label>
+                            <textarea class="form-input w-full outline-none rounded-lg px-5 py-3 resize-none bg-slate-600 text-white placeholder-slate-400 border border-slate-500 focus:border-blue-400" rows="6" placeholder="Write your detailed notes here..." name="details" required></textarea>
+                        </div>
+                        <button class="btn-primary w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2" type="submit">
+                            <i class="fas fa-plus"></i>
+                            Create Note
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Grid Section -->
+        <div class="px-6 pb-16">
+            <div class="max-w-6xl mx-auto">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-list text-blue-400"></i>
+                        Your Notes
+                    </h2>
+                    <% if(files.length > 0) { %>
+                        <p class="text-slate-400 text-sm mt-2"><%= files.length %> note<%= files.length !== 1 ? 's' : '' %></p>
+                    <% } %>
+                </div>
+
+                <% if(files.length > 0) { %>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <% files.forEach(function(val){ %>
+                            <div class="task-card bg-gradient-to-br from-slate-700 to-slate-600 rounded-xl p-6 border border-slate-500 hover:border-blue-400">
+                                <div class="flex items-start justify-between mb-3">
+                                    <h3 class="text-white text-xl font-semibold flex-1 break-words line-clamp-2"><%= val.replace('.txt', '') %></h3>
+                                    <i class="fas fa-file-alt text-blue-400 ml-2 flex-shrink-0"></i>
+                                </div>
+                                <p class="text-slate-300 text-sm mb-4">Click to view and manage</p>
+                                <div class="flex gap-2">
+                                    <a href="/files/<%= val %>" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-center font-medium text-sm transition flex items-center justify-center gap-2">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <a href="/edit/<%= val %>" class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg text-center font-medium text-sm transition flex items-center justify-center gap-2">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-16">
+                        <i class="fas fa-inbox text-slate-500 text-6xl mb-4"></i>
+                        <h3 class="text-slate-400 text-xl font-medium">No notes yet</h3>
+                        <p class="text-slate-500 mt-2">Create your first note above to get started!</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
